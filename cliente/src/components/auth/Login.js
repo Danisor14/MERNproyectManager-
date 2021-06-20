@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState } from 'react'
+import {Link} from 'react-router-dom'
 import { Button, Grid, makeStyles, Typography, TextField } from '@material-ui/core'
 
 
@@ -59,6 +60,24 @@ const useStyles = makeStyles(() => ({
 
 const Login = () => {
     const classes = useStyles();
+    const [user, setUser] = useState({
+        email: '',
+        password: ''
+    });
+
+
+    const handleChange = (e) => {
+        setUser({
+            ...user,
+            [e.target.name]: e.target.value 
+        })
+    }
+
+
+    const onSubmit = (e) => {
+        e.preventDefault();
+    }
+
 
     return (
         <div className={classes.container}>
@@ -81,14 +100,17 @@ const Login = () => {
                     <Typography variant="body2" className={classes.textManage}>
                         Manage your projets with us
                     </Typography>
-                    <Button 
-                        variant="outlined" 
-                        classes={{
-                          outlined: classes.btnUp  
-                        }}
-                    > 
-                        Sing Up
-                    </Button>
+                   
+                    <Link to="/new-account">       
+                        <Button 
+                            variant="outlined" 
+                            classes={{
+                            outlined: classes.btnUp  
+                            }}                  
+                        > 
+                            Sing Up
+                        </Button>
+                    </Link>
                 </Grid>
 
                 <Grid 
@@ -103,29 +125,35 @@ const Login = () => {
                         Sing in
                     </Typography>   
                     <TextField 
-                        id="filled-basic" 
                         label="Email" 
                         variant="filled" 
+                        name="email"
+                        value={user.email}
                         className={classes.textField}
                         classes={{
                             root: classes.textfield
                         }}
+                        onChange={e => handleChange(e)}
                     />
                     <TextField
                         label="Password"
                         type="password"
                         autoComplete="current-password"
                         variant="filled"
+                        name="password"
+                        value={user.password}
                         className={classes.textField}
                         classes={{
                             root: classes.textfield
                         }}
+                        onChange={e => handleChange(e)}
                     />
                     <Button 
                         variant="contained" 
                         classes={{
                             root: classes.btnIn
                         }}
+                        onSubmit={() => onSubmit()}
                     > 
                         Sing in
                     </Button>
