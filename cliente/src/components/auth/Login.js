@@ -53,7 +53,6 @@ const useStyles = makeStyles(() => ({
         '& .MuiFilledInput-underline:after': {
           borderBottomColor: '#181721',
         },
-
     },
 
 }));
