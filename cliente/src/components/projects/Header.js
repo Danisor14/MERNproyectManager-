@@ -15,9 +15,10 @@ const useStyles = makeStyles( theme => ({
         [theme.breakpoints.up('md')]: {
             width: `calc(100% - ${drawerWidth}px)`,
             marginLeft: drawerWidth,
+            borderTopLeftRadius: 40,
         },
         backgroundColor: "#252433",
-        borderTopLeftRadius: 40
+        boxShadow: 'none',
     },
     toolbar:{
         paddingTop: 25
