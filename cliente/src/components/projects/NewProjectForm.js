@@ -1,21 +1,30 @@
-import React, {Fragment, useState} from 'react'
+import React, {Fragment, useState, useContext} from 'react'
 import { Button, makeStyles, TextField } from '@material-ui/core'
+import ProjectContex from '../../contex/projects/ProjectContext'
 
 
 const useStyles = makeStyles(() => ({
-    textFieldCreate: {
-        /* height: 50, */
-        /* color: '#E9E9E9', */
-        background: '#E9E9E9',
-        /* '& label': {
-            color: '#181721', 
-        }, */
+    textFieldCreate: { 
+        '& .MuiFilledInput-root':{
+            background: '#E9E9E9',
+        },
         '& label.Mui-focused': {
             color: '#181721',
         },
         '& .MuiFilledInput-underline:after': {
-            borderBottomColor: '#67dabb',
+            borderBottomColor: '#67dabb'
         },
+        '& label.Mui-error':{
+            color:'#d66058'
+        },
+        '& .MuiFormHelperText-root': {
+            background: '#181721',
+            color:'#d66058',
+        },
+    },
+    helperText: {
+        background: '#181721',
+        color:'#d66058',
     },
     btnCreate: {
         width: '80%',
@@ -36,35 +45,63 @@ const NewProjectForm = () => {
     const [projectName, setProjectName] = useState({
         name: ''
     });
+    const [errorForm, setErrorForm] = useState(false);
 
+    const newFormContex = useContext(ProjectContex);
+    const {form, addProject} = newFormContex;
+
+   
     const handleChange = (e) => {
         setProjectName({
             ...projectName,
             [e.target.name]: e.target.value
         });
+        setErrorForm(false);
+    }
+
+
+    const handleClick = () => {
+        //validations
+        if(projectName.name === ''){
+            setErrorForm(true);
+            return;
+        } 
+
+        addProject(projectName);
+        //clean textField or reset form
+        setProjectName({
+            name: ''
+        });
     }
 
     return (  
         <Fragment>
-            <TextField  
-                label="Name"
-                variant="filled"
-                name="name"
-                value={projectName.name}
-                classes={{
-                    root: classes.textFieldCreate
-                }} 
-                onChange={(e) => handleChange(e)} 
-            />
-            <Button 
-                variant="contained"
-                classes={{
-                    root: classes.btnCreate
-                }}
-            >
-                Create project
-            </Button>
-        </Fragment>
+            {form ?(
+                <Fragment>
+                    <TextField  
+                        label="Name"
+                        variant="filled"
+                        name="name"
+                        size="small"
+                        autoFocus={true}
+                        value={projectName.name}
+                        error={errorForm}
+                        helperText={ errorForm ? "Incorrect entry." : ""}
+                        classes={{root: classes.textFieldCreate,}} 
+                        onChange={(e) => handleChange(e)} 
+                    /> 
+                    <Button 
+                        variant="contained"
+                        classes={{
+                            root: classes.btnCreate
+                        }}
+                        onClick={(e) => handleClick()}
+                    >
+                        Create project
+                    </Button>
+                </Fragment> 
+            ):null}  
+        </Fragment>  
     );
 }
  

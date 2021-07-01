@@ -1,7 +1,7 @@
-import React from 'react'
-import {Grid, Typography, List, makeStyles, ListItemText, ListItem} from '@material-ui/core'
+import React, {useContext} from 'react'
+import {Grid, Typography, List, makeStyles,} from '@material-ui/core'
 import Task from './Task'
-
+import ProjectContex from '../../contex/projects/ProjectContext';
 
 const useStyles = makeStyles((theme) =>({
     container: {
@@ -38,19 +38,41 @@ const tasksProject = [
 
 const ListTasks = () => {
     const classes = useStyles();
+    const projectState = useContext(ProjectContex);
+    const {projectSelected} = projectState;
+    
+    if (!projectSelected) {
+        return(
+            <Grid
+                container item
+                xs={12} sm={9} md={7}
+                direction="column"
+                justify="flex-start"
+                alignItems="center"
+                className={classes.container}
+            > 
+                
+                <Typography variant="h5" className={classes.title} >
+                    Select a project
+                </Typography> 
+
+            </Grid>
+        )
+    }
+    const [project] = projectSelected;
 
     return (  
         <Grid
         container item
         xs={12} sm={9} md={7}
         direction="column"
-        justify="start"
+        justify="flex-start"
         alignItems="center"
         className={classes.container}
-        >
+        > 
             <Typography variant="h5" className={classes.title} >
-                Hacer una pagina web
-            </Typography>
+                {project.name}
+            </Typography> 
 
             {tasksProject.length === 0 ?(
                 <Typography className={classes.noTasks}>
@@ -64,9 +86,7 @@ const ListTasks = () => {
                 </List>
             )} 
 
-            
         </Grid>
-
     );
 }
  

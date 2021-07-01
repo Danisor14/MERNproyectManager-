@@ -1,7 +1,9 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Button, Drawer, makeStyles, Typography} from '@material-ui/core';
 import NewProjectForm from './NewProjectForm';
 import ListProject from './ListProject';
+import ProjectContex from '../../contex/projects/ProjectContext';
+
 
 export const drawerWidth = 240;
 
@@ -35,6 +37,7 @@ const useStyles = makeStyles( theme => ({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
+        width: '100%',
     },
     btnNew:{
         width: '80%',
@@ -51,6 +54,7 @@ const useStyles = makeStyles( theme => ({
 
 const DrawerComponent = (props) => {
     const classes = useStyles();
+    const newProject = useContext(ProjectContex);
 
     return ( 
         <Drawer 
@@ -75,13 +79,11 @@ const DrawerComponent = (props) => {
                     classes={{
                         root: classes.btnNew
                     }}
+                    onClick={() => newProject.showForm()}
                 >
                     New Project
                 </Button>
                 <NewProjectForm/>
-                <Typography variant="h5" className={classes.spanTitle}>
-                    Projects
-                </Typography>
                 <ListProject/>
             </div>
         </Drawer>

@@ -1,6 +1,6 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import {Grid, TextField, Button, makeStyles} from '@material-ui/core'
-
+import ProjectContex from '../../contex/projects/ProjectContext'
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -11,18 +11,19 @@ const useStyles = makeStyles(() => ({
         borderRadius: 10,
     },
     textFieldTask: {
-        /* height: 50, */
-        /* color: '#E9E9E9', */
         width: '80%',
-        background: '#E9E9E9',
-        /* '& label': {
-            color: '#181721', 
-        }, */
+        '& .MuiFilledInput-root':{
+            backgroundColor: '#E9E9E9',
+        },
         '& label.Mui-focused': {
             color: '#181721',
         },
         '& .MuiFilledInput-underline:after': {
             borderBottomColor: '#67dabb',
+        },
+        '& .MuiFormHelperText-root': {
+            background: '#181721',
+            color:'#d66058',
         },
     },
     btnTask: {
@@ -41,6 +42,10 @@ const useStyles = makeStyles(() => ({
 
 const FormTask = () => {
     const classes = useStyles();
+    const projectState = useContext(ProjectContex);
+    const {projectSelected} = projectState;
+
+    if(!projectSelected) return null
 
     return ( 
         <Grid
@@ -48,19 +53,19 @@ const FormTask = () => {
             sm={9}  md={3}
             direction="column"
             justify="center"
-            alignItems="center"
+            alignItems="center" 
             className={classes.container}
-        >
+        > 
             <TextField  
                 label="Task name"
                 variant="filled"
                 name="taskName"
+                helperText="princesa kivi"
                 /* value={projectName.name} */
-                classes={{
-                    root: classes.textFieldTask
-                }} 
+                classes={{root: classes.textFieldTask}} 
                 /* onChange={(e) => handleChange(e)}  */
             />
+            
             <Button 
                 variant="contained"
                 color="default"

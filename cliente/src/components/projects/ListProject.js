@@ -1,8 +1,22 @@
-import React from 'react'
-import {List, ListItem, ListItemText, Divider, makeStyles, ListItemSecondaryAction,IconButton } from '@material-ui/core'
-import DeleteIcon from '@material-ui/icons/Delete';
+import React, { Fragment, useContext, useEffect, useState } from 'react'
+import {Typography, List, ListItem, ListItemText, Divider, makeStyles, ListItemSecondaryAction,IconButton } from '@material-ui/core'
+import DeleteIcon from '@material-ui/icons/Delete'
+import ProjectContex from '../../contex/projects/ProjectContext'
+
 
 const useStyles = makeStyles(() => ({
+    title: {
+        fontSize: 20,
+        color: '#E9E9E9'
+    },
+    list: {
+        width: '100%',
+    },
+    container: {
+        '&:hover': {
+            background: 'rgba(241,222,250,0.275)',
+        } ,
+    },
     secondary: {
          color: '#E9E9E9',    
          marginRight: 10
@@ -11,7 +25,7 @@ const useStyles = makeStyles(() => ({
         background: '#27253d'
     },
     root:{
-        '&:hover, &:focus': {
+        '&:focus': {
             background: 'rgba(241,222,250,0.275)',
         },
     },
@@ -26,40 +40,69 @@ const useStyles = makeStyles(() => ({
 
 const ListProject = () => {
     const classes = useStyles();
+    const projectsState = useContext(ProjectContex);
+    const {projects, getProjects, selectProject, deleteProject} = projectsState;
+    const [hover, setHover] = useState(false);
 
-    const projects = [
-        {name: 'Conseguir trabajo'},
-        {name: 'Hacer una pagina web'},
-        {name: 'Comprar el pc'}
-    ];
 
+    //get projects when the component has been mounted
+    useEffect(() => {
+        getProjects();
+    }, []);
+   
+    
+    if (projects.length === 0) return null 
+
+    
     return (  
-        <List component="nav">
-            {projects.map(project =>(
-                <div>
-                    <ListItem 
-                        button
-                        classes={{
-                            root: classes.root
-                        }}
-                    >
-                        <ListItemText 
-                            secondary={project.name} 
-                            classes={{
-                                secondary: classes.secondary,
-                            }}
-                        /> 
+        <Fragment>
+            <Typography variant="h5" className={classes.title}>
+                        Projects
+            </Typography>
 
-                        <ListItemSecondaryAction>
-                            <IconButton className={classes.icon}>
-                                <DeleteIcon/>
-                            </IconButton>
-                        </ListItemSecondaryAction>
-                    </ListItem>
-                    <Divider variant="middle" className={classes.divider}/>
-                </div>
-            ))}
-        </List>
+            <List component="nav" className={classes.list}>
+                {projects.map((project) =>( 
+                    <div 
+                        className={classes.container}
+                        onMouseEnter={() => setHover(true)}
+                        onMouseLeave={() => setHover(false)}
+                        key={project.id}
+                    >
+                        <ListItem 
+                            button
+                            classes={{
+                                root: classes.root
+                            }}
+                            onClick={() => selectProject(project.id)}
+                        >
+                            <ListItemText 
+                                secondary={project.name} 
+                                classes={{
+                                    secondary: classes.secondary,
+                                }}
+                            /> 
+                            <ListItemSecondaryAction>
+                            {hover ?(
+                                   
+                                    <IconButton 
+                                        className={classes.icon}
+                                        onClick={() => deleteProject(project.id)}
+                                    >
+                                        <DeleteIcon/>
+                                    </IconButton>
+                                    
+                        
+                            ): null}
+                            </ListItemSecondaryAction>
+                            
+                        </ListItem>
+                        <Divider variant="middle" className={classes.divider}  key={project.id}/>
+                    </div>
+
+
+                ))} 
+            </List>
+        </Fragment>
     );
 }
  

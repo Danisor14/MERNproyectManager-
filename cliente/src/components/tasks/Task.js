@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 import { ListItem, makeStyles, ListItemText, ListItemSecondaryAction, Button, IconButton, Divider, } from '@material-ui/core'
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -48,7 +48,7 @@ const useStyles = makeStyles(() =>({
 
 const Task = ({name, state}) => {
     const classes = useStyles();
-    const [isHover, setIsHover] = useState(false);
+    //const [isHover, setIsHover] = useState(false);
 
     return ( 
         <div>
