@@ -1,9 +1,10 @@
 import React, {useContext} from 'react'
 import {Grid, Typography, List, makeStyles,} from '@material-ui/core'
 import Task from './Task'
-import ProjectContex from '../../contex/projects/ProjectContext';
+import ProjectContex from '../../contex/projects/ProjectContext'
+import TaskContext from '../../contex/tasks/TaskContext'
 
-const useStyles = makeStyles((theme) =>({
+const useStyles = makeStyles(() =>({
     container: {
         height: 'auto',
         padding: 30,
@@ -28,18 +29,14 @@ const useStyles = makeStyles((theme) =>({
 }));
 
 
-const tasksProject = [
-    {name: 'Elegir Plataforma', state: true},
-    {name: 'Elegir colores', state: false},
-    {name: 'Elegir tecnologias', state: false},
-    {name: 'Elegir hosting', state: true} 
-];
-
-
 const ListTasks = () => {
     const classes = useStyles();
+
     const projectState = useContext(ProjectContex);
     const {projectSelected} = projectState;
+
+    const taskState = useContext(TaskContext);
+    const {tasksProject} = taskState;
     
     if (!projectSelected) {
         return(
@@ -81,7 +78,13 @@ const ListTasks = () => {
             ):(
                 <List component="nav" className={classes.list}>
                     {tasksProject.map( task => (
-                        <Task name={task.name} state={task.state}/>  
+                        <Task  
+                            name={task.name} 
+                            state={task.state} 
+                            id={task.id}
+                            key={task.id}
+                            task={task}
+                        />  
                     ))}
                 </List>
             )} 

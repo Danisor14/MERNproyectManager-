@@ -1,7 +1,9 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import { ListItem, makeStyles, ListItemText, ListItemSecondaryAction, Button, IconButton, Divider, } from '@material-ui/core'
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit'
+import DeleteIcon from '@material-ui/icons/Delete'
+import ProjectContex from '../../contex/projects/ProjectContext'
+import TaskContext from '../../contex/tasks/TaskContext'
 
 
 const useStyles = makeStyles(() =>({
@@ -46,9 +48,30 @@ const useStyles = makeStyles(() =>({
 }));
 
 
-const Task = ({name, state}) => {
+const Task = ({name, state, id, task}) => {
     const classes = useStyles();
-    //const [isHover, setIsHover] = useState(false);
+    
+    const projectsState = useContext(ProjectContex);
+    const {projectSelected} = projectsState;
+    
+    const taskState = useContext(TaskContext);
+    const {deleteTask, getTasks, changeTaskEstate, selectTask} = taskState;
+
+
+    const handleDelete = () => {
+        deleteTask(id);
+        getTasks(projectSelected[0].id);
+    }
+
+    const handleChangeState = () => {
+        state = !state;
+        changeTaskEstate(id);
+        getTasks(projectSelected[0].id);
+    }
+
+    const handleEdit = () => {
+        selectTask(task);
+    }
 
     return ( 
         <div>
@@ -62,11 +85,17 @@ const Task = ({name, state}) => {
                 <ListItemSecondaryAction
                     
                 >
-                    <IconButton className={classes.icon}>
+                    <IconButton 
+                        className={classes.icon}
+                        onClick={() => handleEdit()}
+                    >
                         <EditIcon/>
                     </IconButton> 
 
-                    <IconButton className={classes.icon}>
+                    <IconButton 
+                        className={classes.icon}
+                        onClick={() => handleDelete()}
+                    >
                         <DeleteIcon/>
                     </IconButton> 
 
@@ -74,8 +103,9 @@ const Task = ({name, state}) => {
                     (
                         <Button 
                             variant="contained"  
-                            //size="small"
+                            size="small"
                             className={classes.btnComplete}
+                            onClick={() => handleChangeState()}
                         >
                             Complete
                         </Button>
@@ -84,6 +114,7 @@ const Task = ({name, state}) => {
                             variant="contained"  
                             size="small"
                             className={classes.btnIncomplete}
+                            onClick={() => handleChangeState()}
                         >
                             Incomplete
                         </Button>

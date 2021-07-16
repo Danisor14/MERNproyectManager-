@@ -2,6 +2,7 @@ import React, { Fragment, useContext, useEffect, useState } from 'react'
 import {Typography, List, ListItem, ListItemText, Divider, makeStyles, ListItemSecondaryAction,IconButton } from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete'
 import ProjectContex from '../../contex/projects/ProjectContext'
+import TaskContext from '../../contex/tasks/TaskContext'
 
 
 const useStyles = makeStyles(() => ({
@@ -40,14 +41,18 @@ const useStyles = makeStyles(() => ({
 
 const ListProject = () => {
     const classes = useStyles();
-    const projectsState = useContext(ProjectContex);
-    const {projects, getProjects, selectProject, deleteProject} = projectsState;
     const [hover, setHover] = useState(false);
 
+    const projectsState = useContext(ProjectContex);
+    const {projects, getProjects, selectProject, deleteProject} = projectsState;
+    
+    const taskState = useContext(TaskContext);
+    const {getTasks} = taskState;
 
     //get projects when the component has been mounted
     useEffect(() => {
         getProjects();
+        // eslint-disable-next-line
     }, []);
    
     
@@ -73,7 +78,10 @@ const ListProject = () => {
                             classes={{
                                 root: classes.root
                             }}
-                            onClick={() => selectProject(project.id)}
+                            onClick={() => {
+                                selectProject(project.id)
+                                getTasks(project.id)
+                            }}
                         >
                             <ListItemText 
                                 secondary={project.name} 
